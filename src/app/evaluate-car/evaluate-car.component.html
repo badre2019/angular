@@ -1,0 +1,79 @@
+<h1>Evaluez votre voiture</h1>
+<a
+  target="_blank"
+  href="https://vpic.nhtsa.dot.gov/api/"
+  title="API vhicules vpic">
+  The NHTSA Product Information Catalog Vehicle Listing (vPIC) Application Programming Interface (API)
+</a>
+
+<div>
+  <mat-form-field appearance="fill">
+    <mat-label>Marque</mat-label>
+    <mat-select (selectionChange)="activateMatSelectAnnee($event)">
+      <mat-option>Marque</mat-option>
+      <mat-option *ngFor="let marque of marques | async" [value]="marque"> {{marque.Make_Name}}</mat-option>
+    </mat-select>
+  </mat-form-field>
+</div>
+<div>
+  <mat-form-field appearance="fill">
+    <mat-label>Année</mat-label>
+    <mat-select (selectionChange)="activateMatSelectModele($event)" [disabled]="isDisabledMatSelectAnnee">
+      <mat-option>Année</mat-option>
+      <mat-option *ngFor="let annee of annees" [value]="annee">{{annee}}</mat-option>
+    </mat-select>
+  </mat-form-field>
+</div>
+<div>
+  <mat-form-field appearance="fill">
+    <mat-label>Modèle</mat-label>
+    <mat-select (selectionChange)="activateNextButton($event)" [disabled]="isDisabledMatSelectModele">
+      <mat-option>Modèle</mat-option>
+      <mat-option *ngFor="let modele of modeles" [value]="modele">{{modele}}</mat-option>
+    </mat-select>
+  </mat-form-field>
+</div>
+
+<ng-container *ngIf="!isDisplayingCarDetails" >
+  <div>
+    <button mat-raised-button color="primary" (click)="displayCarDetails()" [disabled]="isDisabledNextButton">Suivant</button>
+  </div>
+</ng-container>
+
+<ng-container *ngIf="isDisplayingCarDetails" >
+  <div>
+    <mat-form-field appearance="fill">
+      <mat-label>Type de carburant</mat-label>
+      <mat-select (selectionChange)="activateMatSelectPuissance($event)" matNativeControl id="mySelectId">
+        <mat-option>Type de carburant</mat-option>
+        <mat-option value="essence">Essence</mat-option>
+        <mat-option value="diesel">Diesel</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+  <div>
+    <mat-form-field appearance="fill">
+      <mat-label>Puissance</mat-label>
+      <mat-select (selectionChange)="activateMatSelectTransmission($event)" [disabled]="isDisabledMatSelectPuissance">
+        <mat-option>Modèle</mat-option>
+        <mat-option *ngFor="let modele of modeles" [value]="modele">{{modele}}</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+  <div>
+    <mat-form-field appearance="fill">
+      <mat-label>Transmission</mat-label>
+      <mat-select (selectionChange)="activateEvaluateButton($event)" [disabled]="isDisabledMatSelectTransmission">
+        <mat-option>Modèle</mat-option>
+        <mat-option *ngFor="let modele of modeles" [value]="modele">{{modele}}</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+
+  <ng-container >
+    <div>
+      <button mat-raised-button color="primary" (click)="evaluateMyCar()" [disabled]="isDisabledEvaluateButton">Evaluer</button>
+    </div>
+  </ng-container>
+</ng-container>
+
