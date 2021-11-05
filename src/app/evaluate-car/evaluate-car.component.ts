@@ -1,15 +1,16 @@
 import { Component, OnInit } from '@angular/core';
 import {CarService} from "../service/car.service";
-import {Observable, of} from "rxjs";
+import {BehaviorSubject, Observable, of} from "rxjs";
+import {map, scan} from "rxjs/operators";
 
 interface Make {
   id: number;
-  name: string;
+  Make_Name: string;
 }
 
 const getMarques$ : Observable<Make[]> = of([
-  { id: 1, name: 'A'},
-  { id: 2, name: 'B'}
+  { id: 1, Make_Name: 'A'},
+  { id: 2, Make_Name: 'B'}
 ])
 
 @Component({
@@ -19,10 +20,20 @@ const getMarques$ : Observable<Make[]> = of([
 })
 export class EvaluateCarComponent implements OnInit {
 
-  marques: Observable<Make[]>;
-  // marques: any;
   modeles: string[] = [];
   annees: string[] = [];
+
+  data : Array<Make> = [
+    {id:1, Make_Name:'car1'},
+    {id:2, Make_Name:'car2'},
+    {id:3, Make_Name:'car3'},
+    {id:4, Make_Name:'car4'},
+    ];
+
+  marques: Observable<any>;
+  limit = 10;
+  offset = 0;
+  options = new BehaviorSubject<any>([]);
 
   isDisabledMatSelectAnnee : boolean = true;
   isDisabledMatSelectModele : boolean = true;
@@ -32,26 +43,16 @@ export class EvaluateCarComponent implements OnInit {
   isDisabledEvaluateButton : boolean = true;
   isDisplayingCarDetails : boolean = false;
 
-  constructor(private carService: CarService) { }
+  constructor(private carService: CarService) {
+    this.marques = this.options.asObservable().pipe(
+      scan((acc :any, cur: any) => {
+        return [...acc, ...cur];
+      }, [])
+    );
+  }
 
-  ngOnInit(): void {
-
-
-
-    /*this.carService.getAllMarques().subscribe( marques => {
-      // console.log('marques : ' +  marques);
-      // console.log('marques.Results : ' +  marques.Results);
-      // let make: Make = marques.Results[0];
-      // let makeArray: Array<Make> = marques.Results;
-      // console.log('make : ' +  make);
-      // console.log(makeArray);
-      // console.log('marques.Results[0].Make_Name : ' + marques.Results[0].Make_Name);
-      return this.marques = marques.Results;
-    }, error => {console.log(error)});*/
-
-    // this.marques = this.carService.getAllMarques();
-    this.marques = getMarques$;
-
+  ngOnInit() {
+    this.getAllMakes();
     this.modeles = [
       'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H',
       'I', 'J', 'K', 'L'
@@ -60,6 +61,24 @@ export class EvaluateCarComponent implements OnInit {
       '2021', '2020', '2019', '2018', '2017', '2016', '2015', '2014',
       '2013', '2012', '2011', '2010'
     ];
+  }
+
+  getAllMakes() {
+    this.carService.getAllMarques().pipe(
+      map(res => {
+        this.data = res.Results;
+        return this.data;
+      })).subscribe( () => {
+      this.getNextBatch();
+    });
+  }
+
+  getNextBatch() {
+    const result = this.data.slice(this.offset, this.offset + this.limit);
+    console.log('result : ');
+    console.log(result);
+    this.options.next(result);
+    this.offset += this.limit;
   }
 
   activateMatSelectAnnee($event: any) {

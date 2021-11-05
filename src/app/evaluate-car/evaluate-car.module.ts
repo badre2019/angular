@@ -5,21 +5,28 @@ import {MatSelectModule} from "@angular/material/select";
 import {MatFormFieldModule} from "@angular/material/form-field";
 import {EvaluateCarRoutingModule} from "./evaluate-car.routing.module";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
-import {DemoMaterialModule} from "../material.module";
 import {MatNativeDateModule} from "@angular/material/core";
 import {MatButtonToggleModule} from "@angular/material/button-toggle";
 import {MatInputModule} from "@angular/material/input";
 import {MatDatepickerModule} from "@angular/material/datepicker";
-
+import {MatSelectInfiniteScrollModule} from 'ng-mat-select-infinite-scroll';
 
 @NgModule({
     declarations: [EvaluateCarComponent],
     exports: [EvaluateCarComponent],
-    imports: [CommonModule,FormsModule, MatFormFieldModule, MatSelectModule, EvaluateCarRoutingModule, ReactiveFormsModule,
-      DemoMaterialModule,
+    imports: [
+      CommonModule,
+      FormsModule,
+      MatFormFieldModule,
+      MatSelectModule,
+      MatSelectInfiniteScrollModule,
+      EvaluateCarRoutingModule,
+      ReactiveFormsModule,
       MatNativeDateModule,
-      MatButtonToggleModule, MatFormFieldModule, MatSelectModule, MatInputModule, MatDatepickerModule,],
-
+      MatButtonToggleModule,
+      MatInputModule,
+      MatDatepickerModule,
+    ],
     entryComponents: [EvaluateCarComponent],
 })
 export class EvaluateCarModule { }

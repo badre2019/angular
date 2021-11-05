@@ -3,7 +3,6 @@ import {environment} from "../../environments/environment";
 import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs";
 
-
 @Injectable({
   providedIn: 'root'
 })
@@ -15,6 +14,6 @@ export class CarService {
   }
 
   getAllMarques(): Observable<any> {
-    return this.http.get(`${this.baseUrl}/getallmakes?format=json`);
+    return this.http.get(`${this.baseUrl}/getallmakes?format=json`)
   }
 }

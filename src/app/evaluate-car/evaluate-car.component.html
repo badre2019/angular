@@ -9,7 +9,7 @@
 <div>
   <mat-form-field appearance="fill">
     <mat-label>Marque</mat-label>
-    <mat-select (selectionChange)="activateMatSelectAnnee($event)">
+    <mat-select (infiniteScroll)="getNextBatch()" [complete]="offset === data.length" msInfiniteScroll (selectionChange)="activateMatSelectAnnee($event)">
       <mat-option>Marque</mat-option>
       <mat-option *ngFor="let marque of marques | async" [value]="marque"> {{marque.Make_Name}}</mat-option>
     </mat-select>
